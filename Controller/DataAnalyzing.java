@@ -613,6 +613,36 @@ public class DataAnalyzing {
         return returnVector;
     }
 
+    public Vector getDataFromSQLDatabase(String findingWord){
+        Vector returnVector = new Vector();
+        try {
+            System.out.println(defaultColor.YELLOW + "<Data Analyzing> [getDataFromSQLDatabase]: Loading data from SQL Database" + defaultColor.RESET);
+            Statement sqlStatement = sqlServerConnection.createStatement();
+            ResultSet sqlResultSet = sqlStatement.executeQuery("Select * from Word WHERE word LIKE '" + findingWord + "%' order by word");
+
+            while (sqlResultSet.next()){
+                word = new Word();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(new Date(sqlResultSet.getDate("lastLearn").getTime()));
+
+                word.setId(sqlResultSet.getInt("id"));
+                word.setWord(sqlResultSet.getString("word"));
+                word.setMeaning(sqlResultSet.getString("meaning"));
+                word.setType(sqlResultSet.getInt("type"));
+                word.setPhonetic(sqlResultSet.getString("phonetic"));
+                word.setLastLearningDate(new SimpleDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1, calendar.get(Calendar.DAY_OF_MONTH)));
+                word.setLearningLevel(sqlResultSet.getInt("learningLevel"));
+                System.out.println("<Data Analyzing> [ONLINE IMPORT] <-- " + word.debug());
+                returnVector.add(word);
+            }
+            System.out.println(defaultColor.GREEN + "<Data Analyzing> [getDataFromSQLDatabase]: Loaded data from SQL Database, total number of data: " + returnVector.size() + " words" + defaultColor.RESET);
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return returnVector;
+    }
+
     /** Edit word in SQL Database
      *
      * @param word

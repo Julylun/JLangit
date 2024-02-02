@@ -18,5 +18,6 @@ public class App {
 //        aa.a = 0;
 //        DataAnalyzing dataAnalyzing = new DataAnalyzing();
 //        dataAnalyzing.deleteAllListTable();
+
     }
 }

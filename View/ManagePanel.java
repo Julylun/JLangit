@@ -4,6 +4,7 @@ import Controller.DataAnalyzing;
 import Controller.Listener.ManageButtonListener;
 import Controller.Listener.ManagePopupMenuListener;
 import Controller.Listener.MenuButtonListener;
+import Controller.Listener.searchBarListener;
 import Model.Color.DefaultColor;
 import Model.Word;
 import View.CustomSwing.ManageButton;
@@ -94,6 +95,8 @@ public class ManagePanel extends JPanel {
         for(ManageButton button: vButton){
             button.addActionListener(new ManageButtonListener(this));
         }
+
+        searchBar.addKeyListener(new searchBarListener(this));
     }
     private void init(){
         defaultColor = new DefaultColor();
@@ -133,10 +136,22 @@ public class ManagePanel extends JPanel {
     /**The {@code refreshView()} is used to update data from sql database
      *
      */
-    private void sync(){
+    public void sync(){
         vData = dataAnalyzing.getDataFromSQLDatabase();
         model = dataAnalyzing.getTable(vData,colName);
         model.fireTableDataChanged();
+    }
+
+    public void sync(Vector vLocalData){
+        model = dataAnalyzing.getTable(vLocalData,colName);
+        model.fireTableDataChanged();
+        viewTable = new ViewTable(model);
+        setDefaultFunction();
+        viewTable.addMouseListener(new ManagePopupMenuListener(this));
+    }
+
+    public JTextField getSearchBar() {
+        return searchBar;
     }
 
     /** Renew popup for this class

@@ -46,6 +46,8 @@ public class About extends JFrame {
                 About.this.dispose();
             }
         });
+
+        setAlwaysOnTop(true);
         setUndecorated(true);
         setSize(400,250);
         setLocationRelativeTo(null);
@@ -57,6 +59,6 @@ public class About extends JFrame {
         panelBottom = new SubColorPanel();
         buttonOkay = new ManageButton("Okay");
         title = new WhiteLabel("About");
-        content = new WhiteLabel("<HTML>JLangit is buit in 23/1/2024 by Hoang Lun :D. </br>@poorteam2024</HTML>");
+        content = new WhiteLabel("<HTML>JLangit was buit in 23/1/2024 by Hoang Lun :D. </br>@poorteam2024</HTML>");
     }
 }

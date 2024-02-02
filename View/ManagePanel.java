@@ -20,6 +20,8 @@ import javax.swing.border.LineBorder;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.Vector;
 
 /**The {@code ManagePanel} extends the {@link JPanel}. This is used to contain all components in Manage page and this is Manage
@@ -44,6 +46,8 @@ public class ManagePanel extends JPanel {
     private Vector vData;
     private Vector<ManageButton> vButton;
     private Component parentComponent;
+    private boolean isSearchBarFocusing;
+    public boolean isTyping;
 
     /**Constructor
      *
@@ -60,6 +64,7 @@ public class ManagePanel extends JPanel {
         add(bottomPanel,BorderLayout.SOUTH);
         addComponentIntoTopPanel();
         add(topPanel,BorderLayout.NORTH);
+        searchBar.setText("Search bar");
 
         addListener();
     }
@@ -72,8 +77,15 @@ public class ManagePanel extends JPanel {
         //set UI for top Panel
         searchBar.setColumns(30);
         searchBar.setBorder(new EmptyBorder(0,0,0,0));
+
         searchBar.setForeground(defaultColor.getFontColor());
+        searchBar.setCaretColor(defaultColor.getFontColor());
+        searchBar.setHorizontalAlignment(SwingConstants.CENTER);
         searchBar.setBackground(defaultColor.getSearchBarColor());
+        isSearchBarFocusing = false;
+        isTyping = false;
+
+
         topPanel.setOpaque(true);
         topPanel.setBackground(defaultColor.getMainBackgroundColor());
         topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -97,6 +109,17 @@ public class ManagePanel extends JPanel {
         }
 
         searchBar.addKeyListener(new searchBarListener(this));
+        searchBar.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (searchBar.getText().equals("Search bar")) searchBar.setText("");
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (searchBar.getText().equals("")) searchBar.setText("Search bar");
+            }
+        });
     }
     private void init(){
         defaultColor = new DefaultColor();
@@ -167,6 +190,14 @@ public class ManagePanel extends JPanel {
 
     public ManageTablePopupMenu getPopupMenu() {
         return popupMenu;
+    }
+
+    public boolean isSearchBarFocusing() {
+        return isSearchBarFocusing;
+    }
+
+    public void setFocusingBarStatus(boolean focus){
+        isSearchBarFocusing = focus;
     }
 
     /**
